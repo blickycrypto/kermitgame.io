@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman Game</title>
+    <style>
+        /* Add your CSS styles here */
+        /* For simplicity, you can leave this empty or add basic styling */
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        // JavaScript code for Pacman game
+
+        // Get the canvas element
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Define Pacman properties
+        var pacman = {
+            x: 200,
+            y: 200,
+            radius: 20,
+            mouthOpen: true,
+            direction: "right"
+        };
+
+        // Draw Pacman
+        function drawPacman() {
+            ctx.beginPath();
+            ctx.arc(pacman.x, pacman.y, pacman.radius, Math.PI * (pacman.mouthOpen ? 0.2 : 0.1), Math.PI * (pacman.mouthOpen ? 1.8 : 1.9), false);
+            ctx.lineTo(pacman.x, pacman.y);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Update Pacman's position
+        function update() {
+            // Move Pacman
+            if (pacman.direction === "right") {
+                pacman.x += 5;
+            } else if (pacman.direction === "left") {
+                pacman.x -= 5;
+            } else if (pacman.direction === "up") {
+                pacman.y -= 5;
+            } else if (pacman.direction === "down") {
+                pacman.y += 5;
+            }
+
+            // Check for boundary collisions
+            if (pacman.x + pacman.radius > canvas.width) {
+                pacman.x = canvas.width - pacman.radius;
+                pacman.direction = "left";
+            }
+            if (pacman.x - pacman.radius < 0) {
+                pacman.x = pacman.radius;
+                pacman.direction = "right";
+            }
+            if (pacman.y + pacman.radius > canvas.height) {
+                pacman.y = canvas.height - pacman.radius;
+                pacman.direction = "up";
+            }
+            if (pacman.y - pacman.radius < 0) {
+                pacman.y = pacman.radius;
+                pacman.direction = "down";
+            }
+
+            // Toggle mouth open/close
+            pacman.mouthOpen = !pacman.mouthOpen;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Pacman
+            drawPacman();
+        }
+
+        // Update game loop
+        setInterval(update, 1000 / 30); // 30 frames per second
+    </script>
+</body>
+</html>
